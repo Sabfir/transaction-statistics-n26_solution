@@ -23,14 +23,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 
 public class TransactionControllerTest {
-    // TODO OPINTA: remove comment
-//    given().
-//          standaloneSetup(new CountryController(mock(CountryService.class))).
-//    when().
-//          get("/dictionaries/countries/{alphaCode2}", "alphaCode2").
-//    then().
-//          statusCode(SC_OK);
-
     private TransactionController transactionController;
     @Mock
     private TransactionService transactionService;
