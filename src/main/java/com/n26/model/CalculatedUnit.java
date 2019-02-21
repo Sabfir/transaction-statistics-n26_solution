@@ -16,4 +16,11 @@ public class CalculatedUnit {
     private BigDecimal max;
     private BigDecimal min;
     private long count;
+
+    public CalculatedUnit(CalculatedUnit calculatedUnit) {
+        this.sum = calculatedUnit.getSum();
+        this.max = calculatedUnit.getMax();
+        this.min = calculatedUnit.getMin();
+        this.count = calculatedUnit.getCount();
+    }
 }

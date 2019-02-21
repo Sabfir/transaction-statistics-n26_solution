@@ -45,15 +45,34 @@ public class TransactionServiceImpl implements TransactionService {
         this.transactionStatisticMapper = transactionStatisticMapper;
     }
 
+    public List<CalculatedUnit> getRawData() {
+        lock.lock();
+        try {
+            return queue.stream().map(CalculatedUnit::new).collect(toList());
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public List<CalculatedUnit> getNotEmptyRawData() {
+        lock.lock();
+        try {
+            return queue.stream().filter(cu -> cu.getSum().compareTo(ZERO) != 0).map(CalculatedUnit::new)
+                    .collect(toList());
+        } finally {
+            lock.unlock();
+        }
+    }
+
     @Override
     public TransactionStatisticDto getStatistic() {
         BigDecimal overallSum = ZERO;
         BigDecimal overallMin = ZERO;
         BigDecimal overallMax = ZERO;
         long count = 0;
+        List<CalculatedUnit> data;
         final ReentrantLock lock = this.lock;
         lock.lock();
-        List<CalculatedUnit> data;
         try {
             data = queue.stream().filter(cu -> cu.getSum().compareTo(ZERO) != 0).collect(toList());
         } finally {
@@ -90,6 +109,7 @@ public class TransactionServiceImpl implements TransactionService {
         LocalDateTime utcNow = LocalDateTime.now(Clock.systemUTC());
         final long secondInMinute = Duration.between(timestamp, utcNow).getSeconds();
         if (secondInMinute > 59 || secondInMinute < 0) {
+            // TODO OPINTA: throw exception and test it
             log.error("Transaction is not in the last minute");
             return;
         }

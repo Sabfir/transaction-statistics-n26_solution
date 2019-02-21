@@ -22,12 +22,14 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Slf4j
 public class TransactionValidator implements ConstraintValidator<CheckTransaction, TransactionUnitDto> {
+    public static final ZoneId DEFAULT_ZONE = ZoneId.of("UTC");
     public static final DateTimeFormatter TIMESTAMP_FORMATTER =
-            ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX").withZone(ZoneId.of("UTC"));
+            ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX").withZone(DEFAULT_ZONE);
 
     @Override
     public void initialize(CheckTransaction constraintAnnotation) {}
 
+    // TODO OPINTA: test it
     @Override
     public boolean isValid(TransactionUnitDto transactionUnitDto, ConstraintValidatorContext context) {
         checkAmount(transactionUnitDto.getAmount());
