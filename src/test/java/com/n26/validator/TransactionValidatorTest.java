@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import static com.n26.helper.TestHelper.generateRandomBigDecimalStr;
-import static com.n26.helper.TestHelper.generateRandomTimestampWithingLastMinute;
+import static com.n26.helper.TestHelper.generateRandomTimestampWithingLastMinuteStr;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(Parameterized.class)
@@ -34,10 +34,10 @@ public class TransactionValidatorTest {
     @Parameterized.Parameters
     public static List testCases() {
         return Arrays.asList(new Object[][] {
-                { new TransactionUnitDto(generateRandomBigDecimalStr(1000), generateRandomTimestampWithingLastMinute()) },
-                { new TransactionUnitDto(generateRandomBigDecimalStr(100), generateRandomTimestampWithingLastMinute()) },
-                { new TransactionUnitDto(generateRandomBigDecimalStr(-1000), generateRandomTimestampWithingLastMinute()) },
-                { new TransactionUnitDto(generateRandomBigDecimalStr(1), generateRandomTimestampWithingLastMinute()) }
+                { new TransactionUnitDto(generateRandomBigDecimalStr(1000), generateRandomTimestampWithingLastMinuteStr()) },
+                { new TransactionUnitDto(generateRandomBigDecimalStr(100), generateRandomTimestampWithingLastMinuteStr()) },
+                { new TransactionUnitDto(generateRandomBigDecimalStr(-1000), generateRandomTimestampWithingLastMinuteStr()) },
+                { new TransactionUnitDto(generateRandomBigDecimalStr(1), generateRandomTimestampWithingLastMinuteStr()) }
                 // other positive cases to be added here
         });
     }

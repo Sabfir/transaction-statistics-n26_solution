@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ValidationExceptionHandler {
 
     @ExceptionHandler(value = ValidationException.class)
-    public ResponseEntity handleCommonException(ValidationException exception) {
+    public ResponseEntity<?> handleCommonException(ValidationException exception) {
         final ErrorMessage errorMessage = exception.getErrorMessage();
         log.error("Handled exception with error category: {} and message: {}", errorMessage.getCategory().name(),
                 errorMessage.getMessage());

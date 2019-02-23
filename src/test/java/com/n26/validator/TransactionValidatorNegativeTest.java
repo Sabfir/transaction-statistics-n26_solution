@@ -14,9 +14,9 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import static com.n26.helper.TestHelper.generateRandomBigDecimalStr;
-import static com.n26.helper.TestHelper.generateRandomFutureTimestamp;
-import static com.n26.helper.TestHelper.generateRandomOldTimestamp;
-import static com.n26.helper.TestHelper.generateRandomTimestampWithingLastMinute;
+import static com.n26.helper.TestHelper.generateRandomFutureTimestampStr;
+import static com.n26.helper.TestHelper.generateRandomOldTimestampStr;
+import static com.n26.helper.TestHelper.generateRandomTimestampWithingLastMinuteStr;
 import static com.n26.validator.exception.ErrorCategory.IRRELEVANT_DATA;
 import static com.n26.validator.exception.ErrorCategory.UNPROCESSABLE_DATA;
 
@@ -48,18 +48,18 @@ public class TransactionValidatorNegativeTest {
     public static List testCases() {
         return Arrays.asList(new Object[][] {
                 { null, UNPROCESSABLE_DATA },
-                { new TransactionUnitDto(null, generateRandomTimestampWithingLastMinute()), UNPROCESSABLE_DATA },
-                { new TransactionUnitDto("", generateRandomTimestampWithingLastMinute()), UNPROCESSABLE_DATA },
-                { new TransactionUnitDto(" ", generateRandomTimestampWithingLastMinute()), UNPROCESSABLE_DATA },
-                { new TransactionUnitDto("unparsable", generateRandomTimestampWithingLastMinute()), UNPROCESSABLE_DATA },
+                { new TransactionUnitDto(null, generateRandomTimestampWithingLastMinuteStr()), UNPROCESSABLE_DATA },
+                { new TransactionUnitDto("", generateRandomTimestampWithingLastMinuteStr()), UNPROCESSABLE_DATA },
+                { new TransactionUnitDto(" ", generateRandomTimestampWithingLastMinuteStr()), UNPROCESSABLE_DATA },
+                { new TransactionUnitDto("unparsable", generateRandomTimestampWithingLastMinuteStr()), UNPROCESSABLE_DATA },
                 { new TransactionUnitDto(generateRandomBigDecimalStr(1), null), UNPROCESSABLE_DATA },
                 { new TransactionUnitDto(generateRandomBigDecimalStr(1), ""), UNPROCESSABLE_DATA },
                 { new TransactionUnitDto(generateRandomBigDecimalStr(1), " "), UNPROCESSABLE_DATA },
                 { new TransactionUnitDto(generateRandomBigDecimalStr(1), "2000-01-01"), UNPROCESSABLE_DATA },
-                { new TransactionUnitDto(generateRandomBigDecimalStr(1), generateRandomOldTimestamp()), IRRELEVANT_DATA },
-                { new TransactionUnitDto(generateRandomBigDecimalStr(1), generateRandomOldTimestamp()), IRRELEVANT_DATA},
-                { new TransactionUnitDto(generateRandomBigDecimalStr(1), generateRandomFutureTimestamp()), UNPROCESSABLE_DATA },
-                { new TransactionUnitDto(generateRandomBigDecimalStr(1), generateRandomFutureTimestamp()), UNPROCESSABLE_DATA },
+                { new TransactionUnitDto(generateRandomBigDecimalStr(1), generateRandomOldTimestampStr()), IRRELEVANT_DATA },
+                { new TransactionUnitDto(generateRandomBigDecimalStr(1), generateRandomOldTimestampStr()), IRRELEVANT_DATA},
+                { new TransactionUnitDto(generateRandomBigDecimalStr(1), generateRandomFutureTimestampStr()), UNPROCESSABLE_DATA },
+                { new TransactionUnitDto(generateRandomBigDecimalStr(1), generateRandomFutureTimestampStr()), UNPROCESSABLE_DATA },
                 // other positive cases to be added here
         });
     }

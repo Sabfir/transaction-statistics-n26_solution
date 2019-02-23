@@ -2,6 +2,7 @@ package com.n26.service;
 
 import com.n26.dto.TransactionStatisticDto;
 import com.n26.dto.TransactionUnitDto;
+import com.n26.helper.TestHelper;
 import com.n26.mapper.TransactionStatisticMapper;
 import com.n26.mapper.TransactionUnitMapper;
 import com.n26.model.CalculatedUnit;
@@ -18,11 +19,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
+import static com.n26.helper.TestHelper.generateRandomOldTimestamp;
 import static com.n26.service.TransactionServiceImpl.TIME_TO_STORE_IN_SEC;
 import static com.n26.validator.TransactionValidator.DEFAULT_ZONE;
 import static com.n26.validator.TransactionValidator.TIMESTAMP_FORMATTER;
 import static java.math.BigDecimal.ONE;
 import static java.math.BigDecimal.TEN;
+import static java.math.BigDecimal.ZERO;
 import static java.math.RoundingMode.HALF_UP;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
@@ -83,6 +86,21 @@ public class TransactionServiceImplTest {
     }
 
     @Test
+    public void getStatisticOnEmptyQueue() throws Exception {
+        // when
+        final TransactionStatisticDto expected = new TransactionStatisticDto("0.00", "0.00", "0.00", "0.00", 0L);
+        when(transactionStatisticMapper.toDto(any(TransactionStatistic.class))).thenReturn(expected);
+        final TransactionStatisticDto statistic = transactionService.getStatistic();
+
+        // then
+        assertThat("The statistic's sum is not correct", statistic.getSum(), is("0.00"));
+        assertThat("The statistic's max is not correct", statistic.getMax(), is("0.00"));
+        assertThat("The statistic's min is not correct", statistic.getMin(), is("0.00"));
+        assertThat("The transactions added is not correct", statistic.getCount(), is(0L));
+        assertThat("The statistic's average is not correct", statistic.getAvg(), is("0.00"));
+    }
+
+    @Test
     public void created() throws Exception {
         // given
         LocalDateTime now = LocalDateTime.now(Clock.systemUTC());
@@ -132,6 +150,15 @@ public class TransactionServiceImplTest {
         assertThat("The first element should be the first added", actualResult, is(expectedResultOne));
         actualResult = createdData.get(1);
         assertThat("The last element should be the last added", actualResult, is(expectedResultTen));
+    }
+
+    @Test
+    public void oldTransactionShouldNotBeStored() throws Exception {
+        // when
+        when(transactionUnitMapper.toEntity(any(TransactionUnitDto.class))).thenReturn(new TransactionUnit(TEN, generateRandomOldTimestamp()));
+        transactionService.create(new TransactionUnitDto("10", TestHelper.generateRandomOldTimestampStr()));
+        // then
+        assertThat("Old transaction should not be stored", transactionService.getNotEmptyRawData().size(), is(0));
     }
 
     @Test

@@ -66,9 +66,11 @@ public class TransactionValidator implements ConstraintValidator<CheckTransactio
         LocalDateTime utcNow = LocalDateTime.now(Clock.systemUTC());
         final long createdSecondsAgo = Duration.between(dateTimeValue, utcNow).getSeconds();
         if (createdSecondsAgo > TIME_TO_STORE_IN_SEC - 1) {
-            throw new ValidationException(IRRELEVANT_DATA, "Transaction is too old");
+            throw new ValidationException(IRRELEVANT_DATA,
+                    "Transaction is too old created (UTC) " + createdSecondsAgo + " seconds ago");
         } else if (createdSecondsAgo < 0) {
-            throw new ValidationException(UNPROCESSABLE_DATA, "Future transaction can't be processed");
+            throw new ValidationException(UNPROCESSABLE_DATA,
+                    "Future transaction can't be processed. " + -createdSecondsAgo + " seconds in the future (UTC)");
         }
     }
 }
