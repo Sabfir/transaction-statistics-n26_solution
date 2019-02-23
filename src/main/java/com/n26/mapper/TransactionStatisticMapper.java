@@ -8,7 +8,6 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface TransactionStatisticMapper extends GenericMapper<TransactionStatistic, TransactionStatisticDto> {
 
-    // TODO OPINTA: test it
     @Override
     @Mapping(target = "avg", source = "average")
     TransactionStatisticDto toDto(TransactionStatistic entity);

@@ -29,9 +29,11 @@ public class TransactionValidator implements ConstraintValidator<CheckTransactio
     @Override
     public void initialize(CheckTransaction constraintAnnotation) {}
 
-    // TODO OPINTA: test it
     @Override
     public boolean isValid(TransactionUnitDto transactionUnitDto, ConstraintValidatorContext context) {
+        if (transactionUnitDto == null) {
+            throw new ValidationException(UNPROCESSABLE_DATA, "Transaction can't be empty");
+        }
         checkAmount(transactionUnitDto.getAmount());
         checkTimestamp(transactionUnitDto.getTimestamp());
         return true;

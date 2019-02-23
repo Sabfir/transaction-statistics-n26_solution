@@ -1,5 +1,6 @@
 package com.n26.controller;
 
+import com.n26.helper.TestHelper;
 import com.n26.service.TransactionService;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.json.JSONObject;
@@ -10,6 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.Validator;
 
+import static com.n26.helper.TestHelper.generateRandomTimestampWithingLastMinute;
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.when;
 import static javax.servlet.http.HttpServletResponse.SC_CREATED;
@@ -55,7 +57,7 @@ public class TransactionControllerTest {
     public void createTransaction() throws Exception {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("amount", "100");
-        jsonObject.put("timestamp", "2019-02-18T09:55:35.312Z");
+        jsonObject.put("timestamp", generateRandomTimestampWithingLastMinute());
 
         String expectedJson = jsonObject.toString();
 
